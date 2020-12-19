@@ -1,0 +1,42 @@
+---
+title: "Homework"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Homework}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+# 第一次作业
+
+## Question
+
+Use knitr to produce 3 examples in the book. The 1st example should contain texts and at least one figure. The 2nd example should contains texts and at least one table. The 3rd example should contain at least a couple of LaTeX formulas.
+
+## Answer
+
+### 1.First Example
+R中的women数据集记录了美国女性的平均身高和体重，作图并线性拟合，如下：
+```{r women, r,echo=FALSE}
+
+plot(women)
+abline(lm(weight~height, data=women), col='blue')
+```
+
+
+### 2.Second Example
+
+R中的swiss数据集记录了瑞士在1888年的各省份生育率和社会经济指标:
+```{r,results='asis', echo=FALSE,fig2, fig.height = 3, fig.width = 7, fig.align = "center"}
+knitr::kable(head(swiss))
+```
+
+
+### 3.Third Example
+
+(a): $F(x)$在$x=t$处的导数为：$F'(t) = \lim_{\Delta t \to 0}\frac{F(t+\Delta t)-F(t)}{\Delta t}$
+
+
+(b): 集合中的Morgan定律:$(A\cup B)^c = A^c \cap B^c$

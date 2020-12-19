@@ -1,0 +1,143 @@
+---
+title: "Introduction to Package:StatComp20042"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to Package:StatComp20042}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+__StatComp20042__ is a simple R package developed to reproduce several classical algorithms in machine learing.
+One functions are considered, namely, __perceptron__ (generating hyperplanes for binary classification). For each function, both R and Rcpp versions are produced. Namely __perceptronR__  for R and __perceptronC__ for C++.
+
+
+
+## PerceptronC and PerceptronR
+
+### Principle
+
+The principle of perceptron is to minimize the error loss function based on misclassification.The algorithm flow is as follows.
+
+### Algorithms flows
+
+Flows:
+
+1. Input:
+  * traning data set:$T=\{(x_1,y_1),\dots,(x_N,y_N)\}\quad x_i \in R^n,y_i \in \{+1,-1\},i=1,2,\dots,N$;
+  * Learning rate:$\eta(0<\eta \le 1).$  
+
+2. Output: 
+  * weight vector:$\omega$
+  * bias:b
+
+3. Set initial value $\omega = \omega_0,b=b_0$
+
+4. choose a point $(x_i,y_i)$
+  * if: $y_i(w.x_i+b)\le 0$,then $\omega \leftarrow \omega+\eta y_ix_i,b \leftarrow b+\eta y_i$
+  * else: choose another point,until there is no misclassification in the traning data set.
+
+The code in C++ is show below:
+
+```{r,eval=FALSE}
+NumericVector perceptronC(NumericVector w,double b, double l_rate,NumericMatrix feature, NumericVector target){
+  bool judge = true;
+  while(judge){
+    int wrong_cnt =0;
+    for (int j=0;j<feature.nrow();j++){
+      if(target[j] * (dot(feature.row(j),w)+b) <= 0) {
+        w = w + l_rate*target[j]*feature.row(j);
+        b = b + l_rate*target[j];
+        wrong_cnt = wrong_cnt+1;
+      }
+    }
+    if(wrong_cnt==0){
+      judge = false;
+    }
+  }
+  w.insert(0,b);
+  return(w);
+}
+```
+
+The code in R share the same logic:
+
+```{r,eval=FALSE}
+perceptronR<- function(w,b,l_rate,feature,target){
+  judge=TRUE
+  while(judge){
+    wrong_cnt <- 0
+    for(i in 1:nrow(feature)){
+      if(target[i] * ((feature[i,] %*% w)+b) <=0) {
+        w <- w + l_rate*target[i]*feature[i,]
+        b <- b + l_rate*target[i]
+        wrong_cnt = wrong_cnt+1
+      }
+    }
+    if (wrong_cnt ==0){
+      judge=FALSE
+    }
+
+  }
+  re<- list(w,b)
+  return(re)
+}
+```
+
+
+### A view of Linear separable data set
+
+```{r,fig.cap = "Linear separable binary classification data",fig.wide = TRUE}
+library(ggplot2)
+library(StatComp20042)
+dataPlot <- as.data.frame(iris_trim)
+names(dataPlot) <- c("Sepal.Length","Sepal.Width","Species")
+dataPlot$Species_factor = as.factor(dataPlot$Species)
+
+ggplot(data=dataPlot) + geom_point(aes(x=Sepal.Length,y=Sepal.Width,color=Species_factor))
+```
+
+### Execution code
+
+```{r}
+# set initial values and learning rate
+w = c(0,0);b=0;l_rate=0.001;
+
+# set the input data:feature and target
+f = iris_trim[,c(1,2)]
+t = iris_trim[,3]
+
+# executon algorithm
+resultR <- perceptronR(w,b,l_rate,f,t)
+resultC <- perceptronC(w,b,l_rate,f,t)
+
+# show
+dfShow = data.frame(d =c(0,0),w1=c(0,0),w2=c(0,0))
+dfShow[1,]=array(resultC)
+dfShow[2,] = array(c(resultR[[2]],resultR[[1]]))
+knitr::kable(dfShow)
+```
+
+### Plot the result
+
+The plane equation is $y = -\frac{\omega_1}{\omega_2}x - \frac{1}{\omega_2}b$.
+
+```{r}
+ggplot(data=dataPlot) +
+  geom_point(aes(x=Sepal.Length,y=Sepal.Width,color=Species_factor))+
+  geom_abline(intercept = -resultC[1]/resultC[3], slope = -resultC[2]/resultC[3], color="red")
+```
+
+### Benchmarking _perceptronR_ and _perceptronC_
+
+```{r}
+library(microbenchmark)
+tm <- microbenchmark(
+  resultR = perceptronR(w,b,l_rate,f,t),
+  resultC = perceptronC(w,b,l_rate,f,t)
+)
+knitr::kable(summary(tm)[,c(1,3,5,6)])
+```
+It is clearly that computational speed  of C++ is much faster that that of R.
