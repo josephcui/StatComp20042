@@ -1,6 +1,6 @@
 Package: StatComp20042
 Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Version: 1.0
 Authors@R: 
     person(given = "First",
            family = "Last",
@@ -18,8 +18,7 @@ Depends:
 LinkingTo:
     Rcpp
 Imports: 
-    Rcpp,
-    microbenchmark,
-    knitr,
-    rmarkdown
+    Rcpp,microbenchmark,knitr,rmarkdown
+Suggests:
+   ggplot2
 VignetteBuilder: knitr
