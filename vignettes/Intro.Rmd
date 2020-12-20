@@ -89,7 +89,7 @@ perceptronR<- function(w,b,l_rate,feature,target){
 
 ### A view of Linear separable data set
 
-```{r,fig.cap = "Linear separable binary classification data",fig.wide = TRUE}
+```{r}
 library(ggplot2)
 library(StatComp20042)
 dataPlot <- as.data.frame(iris_trim)
@@ -103,15 +103,12 @@ ggplot(data=dataPlot) + geom_point(aes(x=Sepal.Length,y=Sepal.Width,color=catego
 ```{r}
 # set initial values and learning rate
 w = c(0,0);b=0;l_rate=0.001;
-
 # set the input data:feature and target
 f = iris_trim[,c(1,2)]
 t = iris_trim[,5]
-
 # executon algorithm
 resultR <- perceptronR(w,b,l_rate,f,t)
 resultC <- perceptronC(w,b,l_rate,f,t)
-
 # show
 dfShow = data.frame(d =c(0,0),w1=c(0,0),w2=c(0,0))
 dfShow[1,]=array(resultC)
@@ -131,7 +128,7 @@ ggplot(data=dataPlot) +
 
 ### Benchmarking _perceptronR_ and _perceptronC_
 
-```{r,eval=FALSE}
+```{r}
 library(microbenchmark)
 tm <- microbenchmark(
   resultR = perceptronR(w,b,l_rate,f,t),
@@ -252,6 +249,7 @@ pre_list = NULL
 for (i in 1:nrow(test)){
   pre_list <- append(pre_list,gnb_pre(test[i,-5],gnb_list))
 }
-print(cbind(test,pre_list))
+re <- cbind(test,pre_list)
+print(re[,c(ncol(re)-1,ncol(re))])
 ```
 It is clear that clarify accuracy on test data set is 100%.
