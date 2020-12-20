@@ -92,6 +92,7 @@ perceptronR<- function(w,b,l_rate,feature,target){
 ```{r}
 library(ggplot2)
 library(StatComp20042)
+data(iris_trim)
 dataPlot <- as.data.frame(iris_trim)
 dataPlot$category_factor = as.factor(dataPlot$category)
 

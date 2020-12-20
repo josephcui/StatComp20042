@@ -74,7 +74,7 @@ gaussian_probability <- function(x,mu,sigma){
 #' @return A list composed of prior distribution,a matrix of mean values and a matrix of std values.
 #' @examples
 #' \dontrun{
-#' library(StatComp20042)
+#' data(iris_trim)
 #' train_and_test <- train_test_split(raw_data=iris_trim, train_size=0.8, raw_seed=112)
 #' train <- train_and_test[[1]]
 #' test <- train_and_test[[2]]
@@ -115,7 +115,7 @@ gnb_fit <- function(train) {
 #' @return the category of test_array
 #' @examples
 #' \dontrun{
-#' library(StatComp20042)
+#' data(iris_trim)
 #' train_and_test <- train_test_split(raw_data=iris_trim, train_size=0.8, raw_seed=112)
 #' train <- train_and_test[[1]]
 #' test <- train_and_test[[2]]

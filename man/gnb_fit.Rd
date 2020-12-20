@@ -17,7 +17,7 @@ Fit a gaussian naive bayes model.
 }
 \examples{
 \dontrun{
-library(StatComp20042)
+data(iris_trim)
 train_and_test <- train_test_split(raw_data=iris_trim, train_size=0.8, raw_seed=112)
 train <- train_and_test[[1]]
 test <- train_and_test[[2]]
