@@ -120,12 +120,8 @@ gnb_fit <- function(train) {
 #' train <- train_and_test[[1]]
 #' test <- train_and_test[[2]]
 #' gnb_list = gnb_fit(train)
-#' pre_list = NULL
-#' for (i in 1:nrow(test)){
-#'   pre_list <- append(pre_list,gnb_pre(test[i,-5],gnb_list))
-#' }
-#' print(cbind(test,pre_list))
-#' }
+#' tf <- c(5,3.5,1.5,0.2)
+#' print(gnb_pre(tf, gnb_list))
 #' @export
 gnb_pre <- function(test_array,gnb_list){
   cat_num <- length(gnb_list$`Prior Distribution`)
