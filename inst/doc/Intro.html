@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to Package:StatComp20042</title>
+
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to Package:StatComp20042</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p><strong>StatComp20042</strong> is a simple R package developed to reproduce several classical algorithms in machine learning. Three functions are considered, namely, <strong>perceptronR</strong> , <strong>perceptronC</strong> (generating hyperplanes for binary classification). And <strong>gnb_fit</strong> , <strong>gnb_pre</strong> (fiting a gaussian naive bayes model for classification problems and predicting under the model)</p>
+</div>
+<div id="perceptron" class="section level2">
+<h2>Perceptron</h2>
+<div id="principle" class="section level3">
+<h3>Principle</h3>
+<p>The principle of perceptron is to minimize the error loss function based on misclassification.The algorithm flow is as follows.</p>
+</div>
+<div id="algorithms-flows" class="section level3">
+<h3>Algorithms flows</h3>
+<p>Flows:</p>
+<ol style="list-style-type: decimal">
+<li>Input:</li>
+</ol>
+<ul>
+<li>traning data set:<span class="math inline">\(T=\{(x_1,y_1),\dots,(x_N,y_N)\}\quad x_i \in R^n,y_i \in \{+1,-1\},i=1,2,\dots,N\)</span>;</li>
+<li>Learning rate:<span class="math inline">\(\eta(0&lt;\eta \le 1).\)</span></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Output:</li>
+</ol>
+<ul>
+<li>weight vector:<span class="math inline">\(\omega\)</span></li>
+<li>bias:b</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Set initial value <span class="math inline">\(\omega = \omega_0,b=b_0\)</span></p></li>
+<li><p>choose a point <span class="math inline">\((x_i,y_i)\)</span></p></li>
+</ol>
+<ul>
+<li>if: <span class="math inline">\(y_i(w.x_i+b)\le 0\)</span>,then <span class="math inline">\(\omega \leftarrow \omega+\eta y_ix_i,b \leftarrow b+\eta y_i\)</span></li>
+<li>else: choose another point,until there is no misclassification in the traning data set.</li>
+</ul>
+<p>The code in C++ is show below:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">NumericVector <span class="kw">perceptronC</span>(NumericVector w,double b, double l_rate,NumericMatrix feature, NumericVector target){</a>
+<a class="sourceLine" id="cb1-2" title="2">  bool judge =<span class="st"> </span>true;</a>
+<a class="sourceLine" id="cb1-3" title="3">  <span class="cf">while</span>(judge){</a>
+<a class="sourceLine" id="cb1-4" title="4">    int wrong_cnt =<span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb1-5" title="5">    <span class="cf">for</span> (int <span class="dt">j=</span><span class="dv">0</span>;j<span class="op">&lt;</span><span class="kw">feature.nrow</span>();j<span class="op">++</span>){</a>
+<a class="sourceLine" id="cb1-6" title="6">      <span class="cf">if</span>(target[j] <span class="op">*</span><span class="st"> </span>(<span class="kw">dot</span>(<span class="kw">feature.row</span>(j),w)<span class="op">+</span>b) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb1-7" title="7">        w =<span class="st"> </span>w <span class="op">+</span><span class="st"> </span>l_rate<span class="op">*</span>target[j]<span class="op">*</span><span class="kw">feature.row</span>(j);</a>
+<a class="sourceLine" id="cb1-8" title="8">        b =<span class="st"> </span>b <span class="op">+</span><span class="st"> </span>l_rate<span class="op">*</span>target[j];</a>
+<a class="sourceLine" id="cb1-9" title="9">        wrong_cnt =<span class="st"> </span>wrong_cnt<span class="op">+</span><span class="dv">1</span>;</a>
+<a class="sourceLine" id="cb1-10" title="10">      }</a>
+<a class="sourceLine" id="cb1-11" title="11">    }</a>
+<a class="sourceLine" id="cb1-12" title="12">    <span class="cf">if</span>(wrong_cnt<span class="op">==</span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb1-13" title="13">      judge =<span class="st"> </span>false;</a>
+<a class="sourceLine" id="cb1-14" title="14">    }</a>
+<a class="sourceLine" id="cb1-15" title="15">  }</a>
+<a class="sourceLine" id="cb1-16" title="16">  <span class="kw">w.insert</span>(<span class="dv">0</span>,b);</a>
+<a class="sourceLine" id="cb1-17" title="17">  <span class="kw">return</span>(w);</a>
+<a class="sourceLine" id="cb1-18" title="18">}</a></code></pre></div>
+<p>The code in R share the same logic:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">perceptronR&lt;-<span class="st"> </span><span class="cf">function</span>(w,b,l_rate,feature,target){</a>
+<a class="sourceLine" id="cb2-2" title="2">  judge=<span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb2-3" title="3">  <span class="cf">while</span>(judge){</a>
+<a class="sourceLine" id="cb2-4" title="4">    wrong_cnt &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(feature)){</a>
+<a class="sourceLine" id="cb2-6" title="6">      <span class="cf">if</span>(target[i] <span class="op">*</span><span class="st"> </span>((feature[i,] <span class="op">%*%</span><span class="st"> </span>w)<span class="op">+</span>b) <span class="op">&lt;=</span><span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb2-7" title="7">        w &lt;-<span class="st"> </span>w <span class="op">+</span><span class="st"> </span>l_rate<span class="op">*</span>target[i]<span class="op">*</span>feature[i,]</a>
+<a class="sourceLine" id="cb2-8" title="8">        b &lt;-<span class="st"> </span>b <span class="op">+</span><span class="st"> </span>l_rate<span class="op">*</span>target[i]</a>
+<a class="sourceLine" id="cb2-9" title="9">        wrong_cnt =<span class="st"> </span>wrong_cnt<span class="op">+</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-10" title="10">      }</a>
+<a class="sourceLine" id="cb2-11" title="11">    }</a>
+<a class="sourceLine" id="cb2-12" title="12">    <span class="cf">if</span> (wrong_cnt <span class="op">==</span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb2-13" title="13">      judge=<span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb2-14" title="14">    }</a>
+<a class="sourceLine" id="cb2-15" title="15"></a>
+<a class="sourceLine" id="cb2-16" title="16">  }</a>
+<a class="sourceLine" id="cb2-17" title="17">  re&lt;-<span class="st"> </span><span class="kw">list</span>(w,b)</a>
+<a class="sourceLine" id="cb2-18" title="18">  <span class="kw">return</span>(re)</a>
+<a class="sourceLine" id="cb2-19" title="19">}</a></code></pre></div>
+</div>
+<div id="a-view-of-linear-separable-data-set" class="section level3">
+<h3>A view of Linear separable data set</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">library</span>(StatComp20042)</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">data</span>(iris_trim)</a>
+<a class="sourceLine" id="cb3-4" title="4">dataPlot &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(iris_trim)</a>
+<a class="sourceLine" id="cb3-5" title="5">dataPlot<span class="op">$</span>category_factor =<span class="st"> </span><span class="kw">as.factor</span>(dataPlot<span class="op">$</span>category)</a>
+<a class="sourceLine" id="cb3-6" title="6"></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="kw">ggplot</span>(<span class="dt">data=</span>dataPlot) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span>Sepal.Length,<span class="dt">y=</span>Sepal.Width,<span class="dt">color=</span>category_factor))</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="executing-code" class="section level3">
+<h3>Executing code</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># set initial values and learning rate</span></a>
+<a class="sourceLine" id="cb4-2" title="2">w =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>);b=<span class="dv">0</span>;l_rate=<span class="fl">0.001</span>;</a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co"># set the input data:feature and target</span></a>
+<a class="sourceLine" id="cb4-4" title="4">f =<span class="st"> </span>iris_trim[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)]</a>
+<a class="sourceLine" id="cb4-5" title="5">t =<span class="st"> </span>iris_trim[,<span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co"># executon algorithm</span></a>
+<a class="sourceLine" id="cb4-7" title="7">resultR &lt;-<span class="st"> </span><span class="kw">perceptronR</span>(w,b,l_rate,f,t)</a>
+<a class="sourceLine" id="cb4-8" title="8">resultC &lt;-<span class="st"> </span><span class="kw">perceptronC</span>(w,b,l_rate,f,t)</a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co"># show</span></a>
+<a class="sourceLine" id="cb4-10" title="10">dfShow =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">d =</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="dt">w1=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="dt">w2=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb4-11" title="11">dfShow[<span class="dv">1</span>,]=<span class="kw">array</span>(resultC)</a>
+<a class="sourceLine" id="cb4-12" title="12">dfShow[<span class="dv">2</span>,] =<span class="st"> </span><span class="kw">array</span>(<span class="kw">c</span>(resultR[[<span class="dv">2</span>]],resultR[[<span class="dv">1</span>]]))</a>
+<a class="sourceLine" id="cb4-13" title="13">knitr<span class="op">::</span><span class="kw">kable</span>(dfShow)</a></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">d</th>
+<th align="right">w1</th>
+<th align="right">w2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">-0.120</td>
+<td align="right">0.078</td>
+<td align="right">-0.1003</td>
+</tr>
+<tr class="even">
+<td align="right">-0.124</td>
+<td align="right">0.079</td>
+<td align="right">-0.1007</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="plot-the-result" class="section level3">
+<h3>Plot the result</h3>
+<p>The plane equation is <span class="math inline">\(y = -\frac{\omega_1}{\omega_2}x - \frac{1}{\omega_2}b\)</span>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data=</span>dataPlot) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span>Sepal.Length,<span class="dt">y=</span>Sepal.Width,<span class="dt">color=</span>category_factor))<span class="op">+</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="op">-</span>resultC[<span class="dv">1</span>]<span class="op">/</span>resultC[<span class="dv">3</span>], <span class="dt">slope =</span> <span class="op">-</span>resultC[<span class="dv">2</span>]<span class="op">/</span>resultC[<span class="dv">3</span>], <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="benchmarking-perceptronr-and-perceptronc" class="section level3">
+<h3>Benchmarking <em>perceptronR</em> and <em>perceptronC</em></h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">library</span>(microbenchmark)</a>
+<a class="sourceLine" id="cb6-2" title="2">tm &lt;-<span class="st"> </span><span class="kw">microbenchmark</span>(</a>
+<a class="sourceLine" id="cb6-3" title="3">  <span class="dt">resultR =</span> <span class="kw">perceptronR</span>(w,b,l_rate,f,t),</a>
+<a class="sourceLine" id="cb6-4" title="4">  <span class="dt">resultC =</span> <span class="kw">perceptronC</span>(w,b,l_rate,f,t)</a>
+<a class="sourceLine" id="cb6-5" title="5">)</a>
+<a class="sourceLine" id="cb6-6" title="6">knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">summary</span>(tm)[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">6</span>)])</a></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">expr</th>
+<th align="right">lq</th>
+<th align="right">median</th>
+<th align="right">uq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">resultR</td>
+<td align="right">296.2781</td>
+<td align="right">307.1414</td>
+<td align="right">320.3249</td>
+</tr>
+<tr class="even">
+<td align="left">resultC</td>
+<td align="right">14.6727</td>
+<td align="right">17.1797</td>
+<td align="right">21.2775</td>
+</tr>
+</tbody>
+</table>
+<p>It is clearly that computational speed of C++ is much faster that that of R.</p>
+</div>
+</div>
+<div id="gaussian-naive-bayes" class="section level2">
+<h2>Gaussian Naive Bayes</h2>
+<div id="principle-1" class="section level3">
+<h3>Principle</h3>
+<p>Gaussian naive Bayes is a classification method based on Bayes theorem and independent hypothesis of characteristic conditions.The model can learn joint distribution and prior distribution of data. For a given input, the output is the category with maximum posterior probability.</p>
+</div>
+<div id="algorithms-flows-1" class="section level3">
+<h3>Algorithms flows</h3>
+<p>Flows:</p>
+<ol style="list-style-type: decimal">
+<li>Input:</li>
+</ol>
+<ul>
+<li>traning data set:<span class="math inline">\(T=\{(x_1,y_1),\dots,(x_N,y_N)\}\quad x_i \in R^n,y_i \in \{c_1,\dots,c_K\},i=1,2,\dots,N\)</span></li>
+<li>a instance:<span class="math inline">\(x_0=(x_0^{(1)},x_0^{(2)},\dots,x_0^{(n)})\)</span></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Output:</li>
+</ol>
+<ul>
+<li>parameter of gaussian naive bayes model.</li>
+<li>category of instance x</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Compute prior probability:<span class="math inline">\(P(Y=c_k)=\frac{\sum\limits_{i=1}^N I(y_i=c_k)}{N}\)</span></p></li>
+<li><p>Compute condition probability of every feature based on gaussian distribution</p></li>
+</ol>
+<ul>
+<li><span class="math inline">\(p(x^{(j)}=x_0^{(j)}|Y=c_k)=\frac{1}{\sqrt{2\pi}\sigma_{j,k}}\exp{(\frac{(x_0^{(j)}-\mu_{j,k})^2}{2\sigma_{j,k}^2})}\)</span> ,where <span class="math inline">\(\mu_{j,k},\sigma_{j,k}\)</span> is estimated by sample mean and sample std.</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li><p>For a given instance <span class="math inline">\(x_0=(x_0^{(1)},x_0^{(2)},\dots,x_0^{(n)})\)</span>,compute: <span class="math inline">\(P(Y=c_k)\prod\limits_{j=1}^n p(x^{(j)}=x_0^{(j)}|Y=c_k), \quad k=1,2,\dots, K\)</span></p></li>
+<li><p>The category of instance <span class="math inline">\(x_0\)</span> is <span class="math inline">\(y=\arg\max\limits_{c_k}P(Y=c_k)\prod\limits_{j=1}^n p(x^{(j)}=x_0^{(j)}|Y=c_k)\)</span></p></li>
+</ol>
+<p>The code of gaussian naive bayes is split into two parts:fit and predict.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># fit</span></a>
+<a class="sourceLine" id="cb7-2" title="2">gnb_fit &lt;-<span class="st"> </span><span class="cf">function</span>(train) {</a>
+<a class="sourceLine" id="cb7-3" title="3">  train_X =<span class="st"> </span>train[,<span class="op">-</span><span class="kw">ncol</span>(train)]</a>
+<a class="sourceLine" id="cb7-4" title="4">  train_y =<span class="st"> </span>train[,<span class="kw">ncol</span>(train)]</a>
+<a class="sourceLine" id="cb7-5" title="5">  tar &lt;-<span class="st"> </span><span class="kw">unique</span>(train_y)</a>
+<a class="sourceLine" id="cb7-6" title="6">  prior_list &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb7-7" title="7">  std_matrix &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb7-8" title="8">  mean_matrix &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb7-9" title="9">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(tar)) {</a>
+<a class="sourceLine" id="cb7-10" title="10">    prior &lt;-<span class="st"> </span><span class="kw">sum</span>(train_y<span class="op">==</span>tar[i])<span class="op">/</span><span class="kw">length</span>(train_y)</a>
+<a class="sourceLine" id="cb7-11" title="11">    tem &lt;-<span class="st"> </span>train_X[train_y<span class="op">==</span>tar[i],]</a>
+<a class="sourceLine" id="cb7-12" title="12">    std_list &lt;-<span class="st"> </span><span class="kw">apply</span>(tem,<span class="dv">2</span>,<span class="cf">function</span>(x) <span class="kw">sqrt</span>(<span class="kw">var</span>(x)))</a>
+<a class="sourceLine" id="cb7-13" title="13">    mean_list &lt;-<span class="st"> </span><span class="kw">apply</span>(tem,<span class="dv">2</span>,mean)</a>
+<a class="sourceLine" id="cb7-14" title="14">    prior_list &lt;-<span class="st"> </span><span class="kw">append</span>(prior_list,prior)</a>
+<a class="sourceLine" id="cb7-15" title="15">    std_matrix &lt;-<span class="st"> </span><span class="kw">cbind</span>(std_matrix,std_list)</a>
+<a class="sourceLine" id="cb7-16" title="16">    mean_matrix &lt;-<span class="st"> </span><span class="kw">cbind</span>(mean_matrix,mean_list)</a>
+<a class="sourceLine" id="cb7-17" title="17">    <span class="kw">names</span>(tar)[i] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;category_&#39;</span>,i)</a>
+<a class="sourceLine" id="cb7-18" title="18">    <span class="kw">names</span>(prior_list)[i] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;prior_prob_category_&#39;</span>,i)</a>
+<a class="sourceLine" id="cb7-19" title="19">    <span class="kw">colnames</span>(std_matrix)[i] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;std_under_category_&#39;</span>,i)</a>
+<a class="sourceLine" id="cb7-20" title="20">    <span class="kw">colnames</span>(mean_matrix)[i] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;mean_under_category_&#39;</span>,i)</a>
+<a class="sourceLine" id="cb7-21" title="21"></a>
+<a class="sourceLine" id="cb7-22" title="22">  }</a>
+<a class="sourceLine" id="cb7-23" title="23">  <span class="kw">return</span>(<span class="kw">list</span>(<span class="st">&#39;Category&#39;</span>=tar,<span class="st">&#39;Prior Distribution&#39;</span>=prior_list,<span class="st">&#39;Mean Matrix&#39;</span>=mean_matrix,<span class="st">&#39;Std Matrix&#39;</span>=std_matrix))</a>
+<a class="sourceLine" id="cb7-24" title="24">}</a>
+<a class="sourceLine" id="cb7-25" title="25"></a>
+<a class="sourceLine" id="cb7-26" title="26"></a>
+<a class="sourceLine" id="cb7-27" title="27"><span class="co"># predict</span></a>
+<a class="sourceLine" id="cb7-28" title="28">gnb_pre &lt;-<span class="st"> </span><span class="cf">function</span>(test_array,gnb_list){</a>
+<a class="sourceLine" id="cb7-29" title="29">  cat_num &lt;-<span class="st"> </span><span class="kw">length</span>(gnb_list<span class="op">$</span><span class="st">`</span><span class="dt">Prior Distribution</span><span class="st">`</span>)</a>
+<a class="sourceLine" id="cb7-30" title="30">  prob_list =<span class="st"> </span><span class="kw">numeric</span>(cat_num)</a>
+<a class="sourceLine" id="cb7-31" title="31">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>cat_num) {</a>
+<a class="sourceLine" id="cb7-32" title="32">    prior &lt;-<span class="st"> </span>gnb_list<span class="op">$</span><span class="st">`</span><span class="dt">Prior Distribution</span><span class="st">`</span>[i]</a>
+<a class="sourceLine" id="cb7-33" title="33">    con_prob &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb7-34" title="34">    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(test_array)){</a>
+<a class="sourceLine" id="cb7-35" title="35">      tem_mean &lt;-<span class="st"> </span>gnb_list<span class="op">$</span><span class="st">`</span><span class="dt">Mean Matrix</span><span class="st">`</span>[j,i]</a>
+<a class="sourceLine" id="cb7-36" title="36">      tem_std &lt;-<span class="st"> </span>gnb_list<span class="op">$</span><span class="st">`</span><span class="dt">Std Matrix</span><span class="st">`</span>[j,i]</a>
+<a class="sourceLine" id="cb7-37" title="37">      con_prob &lt;-<span class="st"> </span>con_prob <span class="op">*</span><span class="st"> </span><span class="kw">gaussian_probability</span>(test_array[j],tem_mean,tem_std)</a>
+<a class="sourceLine" id="cb7-38" title="38">    }</a>
+<a class="sourceLine" id="cb7-39" title="39">    prob_list[i] &lt;-<span class="st"> </span>prior <span class="op">*</span><span class="st"> </span>con_prob</a>
+<a class="sourceLine" id="cb7-40" title="40">  }</a>
+<a class="sourceLine" id="cb7-41" title="41">  index &lt;-<span class="st"> </span><span class="kw">match</span>(<span class="kw">max</span>(prob_list),prob_list)</a>
+<a class="sourceLine" id="cb7-42" title="42">  <span class="cf">if</span> (<span class="kw">length</span>(index)<span class="op">&gt;</span><span class="dv">1</span>) {</a>
+<a class="sourceLine" id="cb7-43" title="43">    index &lt;-<span class="st"> </span>index[<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(index),<span class="dv">1</span>)]</a>
+<a class="sourceLine" id="cb7-44" title="44">  }</a>
+<a class="sourceLine" id="cb7-45" title="45">  <span class="kw">return</span>(gnb_list<span class="op">$</span><span class="st">`</span><span class="dt">Category</span><span class="st">`</span>[index])</a>
+<a class="sourceLine" id="cb7-46" title="46">}</a></code></pre></div>
+</div>
+<div id="executing-code-1" class="section level3">
+<h3>Executing code</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># Data preprocessing</span></a>
+<a class="sourceLine" id="cb8-2" title="2">train_and_test &lt;-<span class="st"> </span><span class="kw">train_test_split</span>(<span class="dt">raw_data=</span>iris_trim, <span class="dt">train_size=</span><span class="fl">0.8</span>, <span class="dt">raw_seed=</span><span class="dv">112</span>)</a>
+<a class="sourceLine" id="cb8-3" title="3">train &lt;-<span class="st"> </span>train_and_test[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb8-4" title="4">test &lt;-<span class="st"> </span>train_and_test[[<span class="dv">2</span>]]</a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co"># Fit gnb model</span></a>
+<a class="sourceLine" id="cb8-6" title="6">gnb_list =<span class="st"> </span><span class="kw">gnb_fit</span>(train)</a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="kw">print</span>(gnb_list)</a></code></pre></div>
+<pre><code>## $Category
+## category_1 category_2 
+##         -1          1 
+## 
+## $`Prior Distribution`
+## prior_prob_category_1 prior_prob_category_2 
+##                0.5125                0.4875 
+## 
+## $`Mean Matrix`
+##              mean_under_category_1 mean_under_category_2
+## Sepal.Length             4.9951220              6.025641
+## Sepal.Width              3.4268293              2.794872
+## Petal.Length             1.4756098              4.366667
+## Petal.Width              0.2487805              1.351282
+## 
+## $`Std Matrix`
+##              std_under_category_1 std_under_category_2
+## Sepal.Length            0.3680701            0.5030004
+## Sepal.Width             0.4000152            0.3008311
+## Petal.Length            0.1728880            0.4238504
+## Petal.Width             0.1075220            0.1985100</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co"># Predict</span></a>
+<a class="sourceLine" id="cb10-2" title="2">tf &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="fl">3.5</span>,<span class="fl">1.5</span>,<span class="fl">0.2</span>)</a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="kw">print</span>(<span class="kw">gnb_pre</span>(tf, gnb_list))</a></code></pre></div>
+<pre><code>## category_1 
+##         -1</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">pre_category =<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(test)){</a>
+<a class="sourceLine" id="cb12-3" title="3">  pre_category &lt;-<span class="st"> </span><span class="kw">append</span>(pre_category,<span class="kw">gnb_pre</span>(test[i,<span class="op">-</span><span class="dv">5</span>],gnb_list))</a>
+<a class="sourceLine" id="cb12-4" title="4">}</a>
+<a class="sourceLine" id="cb12-5" title="5">re &lt;-<span class="st"> </span><span class="kw">cbind</span>(test,pre_category)</a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="kw">print</span>(re[,<span class="kw">c</span>(<span class="kw">ncol</span>(re)<span class="op">-</span><span class="dv">1</span>,<span class="kw">ncol</span>(re))])</a></code></pre></div>
+<pre><code>##     category pre_category
+## 1         -1           -1
+## 13        -1           -1
+## 17        -1           -1
+## 23        -1           -1
+## 31        -1           -1
+## 32        -1           -1
+## 40        -1           -1
+## 49        -1           -1
+## 50        -1           -1
+## 52         1            1
+## 61         1            1
+## 62         1            1
+## 72         1            1
+## 81         1            1
+## 89         1            1
+## 93         1            1
+## 94         1            1
+## 97         1            1
+## 99         1            1
+## 100        1            1</code></pre>
+<p>It is clear that clarify accuracy on test data set is 100%.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
