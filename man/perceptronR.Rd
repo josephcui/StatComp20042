@@ -2,9 +2,9 @@
 % Please edit documentation in R/StatComp.R
 \name{perceptronR}
 \alias{perceptronR}
-\title{Title}
+\title{Computing hyperplanes for binary classification problems}
 \usage{
-perceptronR(w, b, l_rate, feature, target)
+perceptronR(w, b, l_rate, feature, c)
 }
 \arguments{
 \item{w}{wight vector}
@@ -13,23 +13,23 @@ perceptronR(w, b, l_rate, feature, target)
 
 \item{l_rate}{learning rate}
 
-\item{feature}{characteristic matrix}
+\item{feature}{character matrix}
 
-\item{target}{category}
+\item{c}{category}
 }
 \value{
 parameters of hyperplane
 }
 \description{
-Title
+Computing hyperplanes for binary classification problems
 }
 \examples{
 \dontrun{
-library(StatComp20042)
+data(iris_trim)
 w = c(0,0)
 b=0
 f = iris_trim[,c(1,2)]
-t = iris_trim[,3]
+t = iris_trim[,5]
 l_rate =0.001
 perceptronR(w,b,l_rate,f,t)
 }

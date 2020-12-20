@@ -26,11 +26,11 @@ using namespace Rcpp;
 //' @return  parameters of hyperplane
 //' @examples
 //' \dontrun{
-//' library(StatComp20042)
+//' data(iris_trim)
 //' w = c(0,0)
 //' b=0
 //' f = iris_trim[,c(1,2)]
-//' t = iris_trim[,3]
+//' t = iris_trim[,5]
 //' l_rate =0.001
 //' perceptronC(w,b,l_rate,f,t)
 //' }

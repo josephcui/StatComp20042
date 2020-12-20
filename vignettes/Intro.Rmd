@@ -10,12 +10,12 @@ vignette: >
 
 ## Overview
 
-__StatComp20042__ is a simple R package developed to reproduce several classical algorithms in machine learing.
-One functions are considered, namely, __perceptron__ (generating hyperplanes for binary classification). For each function, both R and Rcpp versions are produced. Namely __perceptronR__  for R and __perceptronC__ for C++.
+__StatComp20042__ is a simple R package developed to reproduce several classical algorithms in machine learning.
+Three functions are considered, namely, __perceptronR__ , __perceptronC__ (generating hyperplanes for binary classification). And __gnb_fit__ , __gnb_pre__ (fiting a gaussian naive bayes model for classification problems and predicting under the model)
 
 
 
-## PerceptronC and PerceptronR
+## Perceptron
 
 ### Principle
 
@@ -93,13 +93,12 @@ perceptronR<- function(w,b,l_rate,feature,target){
 library(ggplot2)
 library(StatComp20042)
 dataPlot <- as.data.frame(iris_trim)
-names(dataPlot) <- c("Sepal.Length","Sepal.Width","Species")
-dataPlot$Species_factor = as.factor(dataPlot$Species)
+dataPlot$category_factor = as.factor(dataPlot$category)
 
-ggplot(data=dataPlot) + geom_point(aes(x=Sepal.Length,y=Sepal.Width,color=Species_factor))
+ggplot(data=dataPlot) + geom_point(aes(x=Sepal.Length,y=Sepal.Width,color=category_factor))
 ```
 
-### Execution code
+### Executing code
 
 ```{r}
 # set initial values and learning rate
@@ -107,7 +106,7 @@ w = c(0,0);b=0;l_rate=0.001;
 
 # set the input data:feature and target
 f = iris_trim[,c(1,2)]
-t = iris_trim[,3]
+t = iris_trim[,5]
 
 # executon algorithm
 resultR <- perceptronR(w,b,l_rate,f,t)
@@ -126,13 +125,13 @@ The plane equation is $y = -\frac{\omega_1}{\omega_2}x - \frac{1}{\omega_2}b$.
 
 ```{r}
 ggplot(data=dataPlot) +
-  geom_point(aes(x=Sepal.Length,y=Sepal.Width,color=Species_factor))+
+  geom_point(aes(x=Sepal.Length,y=Sepal.Width,color=category_factor))+
   geom_abline(intercept = -resultC[1]/resultC[3], slope = -resultC[2]/resultC[3], color="red")
 ```
 
 ### Benchmarking _perceptronR_ and _perceptronC_
 
-```{r}
+```{r,eval=FALSE}
 library(microbenchmark)
 tm <- microbenchmark(
   resultR = perceptronR(w,b,l_rate,f,t),
@@ -141,3 +140,118 @@ tm <- microbenchmark(
 knitr::kable(summary(tm)[,c(1,3,5,6)])
 ```
 It is clearly that computational speed  of C++ is much faster that that of R.
+
+
+## Gaussian Naive Bayes
+
+
+### Principle
+
+Gaussian naive Bayes is a classification method based on Bayes theorem and independent hypothesis of characteristic conditions.The model can learn joint distribution and prior distribution of data. For a given input, the output is the category with  maximum posterior probability.
+
+### Algorithms flows
+
+Flows:
+
+1. Input:
+  * traning data set:$T=\{(x_1,y_1),\dots,(x_N,y_N)\}\quad x_i \in R^n,y_i \in \{c_1,\dots,c_K\},i=1,2,\dots,N$
+  * a instance:$x_0=(x_0^{(1)},x_0^{(2)},\dots,x_0^{(n)})$
+2. Output: 
+  * parameter of gaussian naive bayes model.
+  * category of instance x
+
+3. Compute  prior probability:$P(Y=c_k)=\frac{\sum\limits_{i=1}^N I(y_i=c_k)}{N}$
+
+4. Compute  condition probability of every feature based on gaussian distribution
+  * $p(x^{(j)}=x_0^{(j)}|Y=c_k)=\frac{1}{\sqrt{2\pi}\sigma_{j,k}}\exp{(\frac{(x_0^{(j)}-\mu_{j,k})^2}{2\sigma_{j,k}^2})}$ ,where $\mu_{j,k},\sigma_{j,k}$ is estimated by sample mean and sample std.
+
+5. For a given instance $x_0=(x_0^{(1)},x_0^{(2)},\dots,x_0^{(n)})$,compute:
+$P(Y=c_k)\prod\limits_{j=1}^n p(x^{(j)}=x_0^{(j)}|Y=c_k), \quad k=1,2,\dots, K$
+
+6. The category of instance $x_0$ is $y=\arg\max\limits_{c_k}P(Y=c_k)\prod\limits_{j=1}^n p(x^{(j)}=x_0^{(j)}|Y=c_k)$
+
+The code of gaussian naive bayes is split into two parts:fit and predict.
+
+```{r}
+# fit
+gnb_fit <- function(train) {
+  train_X = train[,-ncol(train)]
+  train_y = train[,ncol(train)]
+  tar <- unique(train_y)
+
+  prior_list <- NULL
+  std_matrix <- NULL
+  mean_matrix <- NULL
+
+  for (i in 1:length(tar)) {
+    prior <- sum(train_y==tar[i])/length(train_y)
+    tem <- train_X[train_y==tar[i],]
+    std_list <- apply(tem,2,function(x) sqrt(var(x)))
+    mean_list <- apply(tem,2,mean)
+
+    prior_list <- append(prior_list,prior)
+    std_matrix <- cbind(std_matrix,std_list)
+    mean_matrix <- cbind(mean_matrix,mean_list)
+
+    names(tar)[i] <- paste0('category_',i)
+    names(prior_list)[i] <- paste0('prior_prob_category_',i)
+    colnames(std_matrix)[i] <- paste0('std_under_category_',i)
+    colnames(mean_matrix)[i] <- paste0('mean_under_category_',i)
+
+  }
+  return(list('Category'=tar,'Prior Distribution'=prior_list,'Mean Matrix'=mean_matrix,'Std Matrix'=std_matrix))
+}
+
+
+# predict
+gnb_pre <- function(test_array,gnb_list){
+  cat_num <- length(gnb_list$`Prior Distribution`)
+
+  prob_list = numeric(cat_num)
+
+  for (i in 1:cat_num) {
+    prior <- gnb_list$`Prior Distribution`[i]
+
+    con_prob <- 1
+    for (j in 1:length(test_array)){
+      tem_mean <- gnb_list$`Mean Matrix`[j,i]
+      tem_std <- gnb_list$`Std Matrix`[j,i]
+      con_prob <- con_prob * gaussian_probability(test_array[j],tem_mean,tem_std)
+    }
+
+    prob_list[i] <- prior * con_prob
+  }
+  index <- match(max(prob_list),prob_list)
+
+  if (length(index)>1) {
+    index <- index[sample(1:length(index),1)]
+  }
+
+  return(gnb_list$`Category`[index])
+}
+
+```
+
+
+### Executing code
+
+```{r}
+# Data preprocessing
+train_and_test <- train_test_split(raw_data=iris_trim, train_size=0.8, raw_seed=112)
+train <- train_and_test[[1]]
+test <- train_and_test[[2]]
+
+# Fit gnb model
+gnb_list = gnb_fit(train)
+print(gnb_list)
+
+
+# Predict
+
+pre_list = NULL
+for (i in 1:nrow(test)){
+  pre_list <- append(pre_list,gnb_pre(test[i,-5],gnb_list))
+}
+print(cbind(test,pre_list))
+```
+It is clear that clarify accuracy on test data set is 100%.

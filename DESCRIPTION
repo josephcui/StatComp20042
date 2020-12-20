@@ -1,17 +1,14 @@
 Package: StatComp20042
-Title: What the Package Does (One Line, Title Case)
+Type: Package
+Title: Reproduce several classical algorithms in machine learning
 Version: 1.0
-Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Author: Weijie Cui
+Date: 2020-12-20
+Maintainer:Weijie Cui <can@mail.ustc.edu.cn>
+Description: Using base r and cpp to reproduce machine learning algorithms.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Depends: 
     R (>= 2.10)
@@ -20,5 +17,7 @@ LinkingTo:
 Imports: 
     Rcpp,microbenchmark,knitr,rmarkdown
 Suggests:
-   ggplot2
+   ggplot2,bootstrap,boot,DAAG,RANN,energy,Ball,mvtnorm,MASS,inline
 VignetteBuilder: knitr
+URL: https://github.com/josephcui/StatComp20042
+BugReports: https://github.com/josephcui/StatComp20042/issues
