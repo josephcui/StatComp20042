@@ -89,7 +89,7 @@ perceptronR<- function(w,b,l_rate,feature,target){
 
 ### A view of Linear separable data set
 
-```{r}
+```{r,fig.width=7}
 library(ggplot2)
 library(StatComp20042)
 data(iris_trim)
@@ -121,7 +121,7 @@ knitr::kable(dfShow)
 
 The plane equation is $y = -\frac{\omega_1}{\omega_2}x - \frac{1}{\omega_2}b$.
 
-```{r}
+```{r,fig.width=7}
 ggplot(data=dataPlot) +
   geom_point(aes(x=Sepal.Length,y=Sepal.Width,color=category_factor))+
   geom_abline(intercept = -resultC[1]/resultC[3], slope = -resultC[2]/resultC[3], color="red")
@@ -234,11 +234,11 @@ print(gnb_list)
 # Predict
 tf <- c(5,3.5,1.5,0.2)
 print(gnb_pre(tf, gnb_list))
-pre_list = NULL
+pre_category = NULL
 for (i in 1:nrow(test)){
-  pre_list <- append(pre_list,gnb_pre(test[i,-5],gnb_list))
+  pre_category <- append(pre_category,gnb_pre(test[i,-5],gnb_list))
 }
-re <- cbind(test,pre_list)
+re <- cbind(test,pre_category)
 print(re[,c(ncol(re)-1,ncol(re))])
 ```
 It is clear that clarify accuracy on test data set is 100%.
