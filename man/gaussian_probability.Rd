@@ -2,7 +2,7 @@
 % Please edit documentation in R/StatComp.R
 \name{gaussian_probability}
 \alias{gaussian_probability}
-\title{Title}
+\title{Compute probability density function}
 \usage{
 gaussian_probability(x, mu, sigma)
 }
@@ -17,5 +17,5 @@ gaussian_probability(x, mu, sigma)
 probabilty denstiny
 }
 \description{
-Title
+Compute probability density function
 }

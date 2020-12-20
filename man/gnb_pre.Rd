@@ -17,3 +17,17 @@ the category of test_array
 \description{
 Predict category of test data using gaussian naive bayes model.
 }
+\examples{
+\dontrun{
+library(StatComp20042)
+train_and_test <- train_test_split(raw_data=iris_trim, train_size=0.8, raw_seed=112)
+train <- train_and_test[[1]]
+test <- train_and_test[[2]]
+gnb_list = gnb_fit(train)
+pre_list = NULL
+for (i in 1:nrow(test)){
+  pre_list <- append(pre_list,gnb_pre(test[i,-5],gnb_list))
+}
+print(cbind(test,pre_list))
+}
+}

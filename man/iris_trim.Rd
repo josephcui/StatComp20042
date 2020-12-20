@@ -7,11 +7,11 @@
 \format{
 A data frame with 100 rows and 5 variables:
 \describe{
-  \item{\code{Sepal.Length}}{double The unit is cm}
-  \item{\code{Sepal.Width}}{double The unit is cm}
-  \item{\code{Petal.Length}}{double The unit is cm}
-  \item{\code{Petal.Width}}{double The unit is cm}
-  \item{\code{category}}{double 1 and -1 represent two types}
+  \item{\code{Sepal.Length}}{The unit is cm}
+  \item{\code{Sepal.Width}}{The unit is cm}
+  \item{\code{Petal.Length}}{The unit is cm}
+  \item{\code{Petal.Width}}{The unit is cm}
+  \item{\code{category}}{1 and -1 represent two types}
 }
 }
 \source{

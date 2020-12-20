@@ -7,7 +7,7 @@
 perceptronR(w, b, l_rate, feature, c)
 }
 \arguments{
-\item{w}{wight vector}
+\item{w}{weight vector}
 
 \item{b}{bias}
 

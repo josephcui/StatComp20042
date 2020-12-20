@@ -4,7 +4,7 @@ NULL
 
 
 #' @title Computing hyperplanes for binary classification problems
-#' @param w wight vector
+#' @param w weight vector
 #' @param b bias
 #' @param l_rate learning rate
 #' @param feature character matrix
