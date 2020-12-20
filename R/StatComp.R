@@ -70,8 +70,8 @@ gaussian_probability <- function(x,mu,sigma){
 }
 
 #' @title Fit a gaussian naive bayes model.
-#' @param train A matrix composed of column vectors. The last column is the category and the former columns are features.
-#' @return A list composed of prior distribution,a matrix of mean values and a matrix of std values.
+#' @param train a matrix composed of column vectors. The last column is the category and the former columns are features.
+#' @return a list composed of prior distribution,mean values and std values given category.
 #' @examples
 #' \dontrun{
 #' data(iris_trim)
@@ -110,7 +110,7 @@ gnb_fit <- function(train) {
 
 #' @title  Predict category of test data using gaussian naive bayes model.
 #' @import stats
-#' @param test_array A feature vector to be predicted
+#' @param test_array a feature vector to be predicted
 #' @param gnb_list the return value of gnb_fit model
 #' @return the category of test_array
 #' @examples
