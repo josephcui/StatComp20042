@@ -16,7 +16,7 @@ double dot(NumericVector x0,NumericVector y0){
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' @title perceptronC
+//' @title Computing hyperplanes for binary classification problems
 //' @description  divide linearly separable datasets into two categories
 //' @param w wight vector
 //' @param b bias
