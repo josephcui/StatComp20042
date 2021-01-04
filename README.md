@@ -10,5 +10,5 @@ devtools::install_github("josephcui/StatComp20042",build_vignettes = FALSE)
 ```
 # How to write a R package
 There is some useful links:
-[Book:R Packages](https://r-pkgs.org/index.html)
+[Book:R Packages](https://r-pkgs.org/index.html),
 [Rcpp for everyone](https://teuder.github.io/rcpp4everyone_en/)
